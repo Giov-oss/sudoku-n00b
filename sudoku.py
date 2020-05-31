@@ -1,3 +1,5 @@
+import time
+
 if __name__ == '__main__':
 	tablero = []
 	for _ in range(9):
@@ -35,46 +37,34 @@ def get_celda(l,m):
 		else:
 			celda = celdas[8]
 
+def possible(i,j,n):
+	transponer_tablero()
+	get_celda(i,j)
+	fila = tablero[i]
+	columna = tablero_c[j]
+	if fila.count(n) == 0 and columna.count(n) == 0 and celda.count(n)==0:
+		return True
+
 def rastreo():
 	for i in range(9):
 		for j in range(9):
 			if tablero[i][j] == 0:
-				transponer_tablero()
-				get_celda(i,j)
-				ops = 0
 				for k in range(1,10):
-					fila = tablero[i]
-					columna = tablero_c[j]
-					if fila.count(k) == 0 and columna.count(k) == 0 and celda.count(k)==0:
-						ops = ops+1
-						if ops == 1:
-							num = k
-						elif ops >1:
-							break
-				if ops == 1:
-					tablero[i][j] = num
-						
-n=0
-while True:
-	rastreo()
-	zeros=0
-	for i in range(9):
-		zeros=zeros+tablero[i].count(0)
-	if zeros == n:
-		break
-	else:
-		n = zeros
-	print('---------------------')
+					if possible(i,j,k):
+						tablero[i][j] = k
+						rastreo()
+						tablero[i][j] = 0
+				return
 	for i in range(9):
 		print(tablero[i])
-	print('---------------------')
+
+t = time.process_time()
+rastreo()
+elapsed_time = time.process_time() - t
+
+print(elapsed_time)
 
 
-
-print('---------------------')
-for i in range(9):
-	print(tablero[i])
-print('---------------------')
 
 
 
